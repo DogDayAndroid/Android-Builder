@@ -1,0 +1,188 @@
+name: "Build kernels"
+
+env:
+  CONFIGURATION: "repos.json"
+  OUT_DIR: "out"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Set-repos:
+    name: "🐂 Parse repos.json"
+    runs-on: ubuntu-latest
+    outputs:
+      repos: ${{ steps.generate-matrix.outputs.repos }}
+    steps:
+      - name: "😄 Checkout"
+        uses: actions/checkout@v3
+
+      - name: "😆 Generate Matrix"
+        id: generate-matrix
+        run: |
+          echo "repos<<EOF" >> $GITHUB_OUTPUT
+          cat  ${{ env.CONFIGURATION }} >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  Build-Kernel:
+    name: "🐎 Build kernel"
+    runs-on: ubuntu-latest
+    needs:
+      - Set-repos
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        repos: ${{ fromJSON(needs.Set-repos.outputs.repos) }}
+    env:
+      kernelDir: ${{ matrix.repos.kernelSource.name }}_${{ matrix.repos.kernelSource.device }}
+
+      kernelName: ${{ matrix.repos.kernelSource.name }}
+      kernelRepo: ${{ matrix.repos.kernelSource.repo }}
+      kernelBranch: ${{ matrix.repos.kernelSource.branch }}
+      kernelDevice: ${{ matrix.repos.kernelSource.device }}
+
+      DEFCONFIG_NAME: ${{ matrix.repos.kernelSource.device }}_defconfig
+
+      withKernelSU: ${{ matrix.repos.withKernelSU }}
+    steps:
+      - name: "✨ Create working dir"
+        run: mkdir -p $kernelDir
+
+      - name: "⭐ Install prerequisites"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential bc curl git zip ftp gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev lftp zstd wget libfl-dev python2 python3 libarchive-tools
+
+      - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
+        working-directory: ./${{ env.kernelDir }}
+        run: |
+          git clone --recursive --branch $kernelBranch $kernelRepo $kernelName --depth=1
+
+      - name: "💫 Get toolchains"
+        working-directory: ./${{ env.kernelDir }}
+        env:
+          toolchains: "${{ toJSON(matrix.repos.toolchains) }}"
+        run: |
+          toolchains_num="$(echo $toolchains | jq 'length')"
+          echo $toolchains_num
+          for ((i=0;i<toolchains_num;i++)); do
+            name=$(echo $toolchains | jq -r ".[$i].name")
+            repo=$(echo $toolchains | jq -r ".[$i].repo")
+            branch=$(echo $toolchains | jq -r ".[$i].branch")
+            git clone --recursive --branch $branch $repo $name --depth=1
+            echo "$(pwd)/$name/" >> $GITHUB_PATH
+            echo "$(pwd)/$name/bin" >> $GITHUB_PATH
+          done
+
+          echo "PATH Variable: $PATH"
+
+      - name: "😎 Set args"
+        id: generate-args
+        working-directory: ./${{ env.kernelDir }}
+        env:
+          params: "${{ toJSON(matrix.repos.params) }}"
+          THREAD: $(nproc --all)
+        run: |
+          echo "PATH Variable: $PATH"
+          ARCH=$(echo $params | jq -r ".ARCH")
+          CROSS_COMPILE=$(echo $params | jq -r ".CROSS_COMPILE")
+          CROSS_COMPILE_COMPAT=$(echo $params | jq -r ".CROSS_COMPILE_COMPAT")
+          CROSS_COMPILE_ARM32=$(echo $params | jq -r ".CROSS_COMPILE_ARM32")
+          CLANG_TRIPLE=$(echo $params | jq -r ".CLANG_TRIPLE")
+          AR=$(echo $params | jq -r ".AR")
+          CC=$(echo $params | jq -r ".CC")
+
+          echo "ARCH=$ARCH" >> $GITHUB_ENV
+
+          args="-j$(nproc --all)"
+          if [ -n "${{ env.OUT_DIR }}" ]; then
+            mkdir -p $(pwd)/${{ env.OUT_DIR }}
+            args="$args O=$(pwd)/${{ env.OUT_DIR }}"
+          fi
+          if [ -n "$ARCH" ]; then
+            args="$args ARCH=$ARCH"
+          fi
+          if [ -n "$CROSS_COMPILE" ]; then
+            args="$args CROSS_COMPILE=$CROSS_COMPILE"
+          fi
+          if [ -n "$CLANG_TRIPLE" ]; then
+            args="$args CLANG_TRIPLE=$CLANG_TRIPLE"
+          fi
+          if [ -n "$CROSS_COMPILE_COMPAT" ]; then
+            args="$args CROSS_COMPILE_ARM32=$CROSS_COMPILE_COMPAT"
+          fi
+          if [ -n "$AR" ]; then
+            args="$args AR=$AR"
+          fi
+          if [ -n "$CC" ]; then
+            args="$args CC=$CC"
+          fi
+          echo "args=$args" >> $GITHUB_OUTPUT
+
+      - name: "😋 Update KernelSU"
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        if: ${{ env.withKernelSU == 'true' }}
+        run: |
+          if [ -d "./KernelSU" ]; then
+            rm -rf "./KernelSU"
+          fi
+          if [ -d "./drivers/kernelsu" ]; then
+            rm -rf "./drivers/kernelsu"
+          fi
+
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
+
+          echo -e "\nCONFIG_KPROBES=y" >> ./arch/${{ env.ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
+          echo -e "\nCONFIG_HAVE_KPROBES=y" >> ./arch/${{ env.ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
+          echo -e "\nCONFIG_KPROBE_EVENTS=y" >> ./arch/${{ env.ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
+
+          cat ./arch/${{ env.ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
+
+      - name: "👍 Make defconfig"
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        env:
+          args: ${{ steps.generate-args.outputs.args }}
+        run: |
+          echo "PATH Variable: $PATH"
+          make ${{ env.args }} ${{ env.DEFCONFIG_NAME }}
+
+      - name: "🎶 Build kernel"
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        env:
+          args: ${{ steps.generate-args.outputs.args }}
+        run: |
+          echo "PATH Variable: $PATH"
+          make ${args}
+
+      - name: "💛 Upload Image"
+        uses: actions/upload-artifact@v3
+        with:
+          name: Image(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: "💙 Upload Image.gz"
+        uses: actions/upload-artifact@v3
+        with:
+          name: Image.gz(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image.gz
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: "💜 Upload dtb"
+        uses: actions/upload-artifact@v3
+        with:
+          name: dtb(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtb
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: "❤️ Upload dtbo.img"
+        uses: actions/upload-artifact@v3
+        with:
+          name: dtbo.img(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtbo.img
+          if-no-files-found: ignore
+          retention-days: 7
