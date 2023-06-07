@@ -1,20 +1,40 @@
-# Android Kernel Builder
+<div align = center>
+
+<img src="./.assets/DogDayAndroid.png" width="200" height="175" alt="banner">
+
+<h1>构建属于你自己的安卓内核镜像</h1>
+
+![License](https://img.shields.io/static/v1?label=License&message=BY-NC-SA&logo=creativecommons&color=green)
+![Language](https://img.shields.io/github/languages/top/DogDayAndroid/Android-Kernel-Builder)
+![Issues](https://img.shields.io/github/issues/DogDayAndroid/Android-Kernel-Builder)
+![Pull Requests](https://img.shields.io/github/issues-pr/DogDayAndroid/Android-Kernel-Builder)
+
 
 这个 Github Action 可以帮助你构建内核。它可以从一个配置文件中读取多个内核源，并使用不同的工具链构建它们。此外，它还支持使用 KernelSU 进行内核补丁，并上传构建好的内核镜像。
+<br>
 
-## Github Action
+---
+
+**[<kbd> <br>  配置文件使用方法  <br> </kbd>](#配置文件解析)** 
+**[<kbd> <br>  快速开始  <br> </kbd>](#使用方法)** 
+**[<kbd> <br>  本地构建  <br> </kbd>](#本地构建)**
+
+---
+</div>
+
+# Github Action
 
 该 Action 包含两个作业：`Set-repos` 和 `Build-Kernel`。
 
 Set-repos 作业从配置文件中读取内核源，并将其输出到 Build-Kernel 作业中。Build-Kernel 作业使用输出的内核源构建内核，并上传构建好的内核镜像。
 
-### 启动方式
+## 启动方式
 
 | 事件名称          | 描述           |
 | ----------------- | -------------- |
 | workflow_dispatch | 手动触发构建。 |
 
-### 构建流程
+## 构建流程
 
 | 构建步骤               | 描述                       |
 | ---------------------- | -------------------------- |
@@ -125,11 +145,27 @@ Set-repos 作业从配置文件中读取内核源，并将其输出到 Build-Ker
 
 这些配置信息将在构建流程中使用，以自动化地构建出特定的内核镜像文件。
 
-## 本地测试
+# 使用方法
+
+本项目的基础使用方法如下：
+
+1. 在 GitHub 上 `fork` 本项目
+
+2. 通过 Github 网页或者拉取到本地修改 `repos.json` 文件，并提交修改
+
+3. 查看 Github 网页的 `Action` 页面，找到 `Build kernels` 并 `Run workflow`
+
+4. 等待编译完成，即可进入对应页面下载编译产物
+
+5. 使用您喜欢的打包软件进行内核打包([AnyKernel3](https://github.com/osm0sis/AnyKernel3)、[Android-Image-Kitchen](https://github.com/osm0sis/Android-Image-Kitchen)、[MagiskBoot](https://github.com/topjohnwu/Magisk/releases) 等)
+
+![Artifacts](./.assets/artifacts.png)
+
+# 本地构建
 
 如果您并不想在 `Github` 上重复执行 `Action`，您可以利用 [nektos/act](https://github.com/nektos/act) 来在本地环境里测试本构建流程并输出。
 
-### 普通本地构建(内核源码等使用 `Git` 拉取)
+## 普通本地构建(内核源码等使用 `Git` 拉取)
 
 这种方式是推荐的本地测试流程，您只需要安装 [nektos/act](https://github.com/nektos/act) 并执行如下指令:
 
@@ -147,7 +183,7 @@ act --artifact-server-path /tmp/artifacts
 act --artifact-server-path /tmp/artifacts -v
 ```
 
-### 完全本地构建(内核源码等均为本地存储)
+## 完全本地构建(内核源码等均为本地存储)
 
 用上述方式构建仍然需要内核源码等存储在云端，如果您一定有要**全部**本地构建的需求，请考虑通过如下方式构建：
 
@@ -157,7 +193,7 @@ act --artifact-server-path /tmp/artifacts -v
 
 此处仅仅提供思路，并不提供具体教程。
 
-## 致谢
+# 致谢
 
 - [weishu](https://github.com/tiann) : KernelSU 的开发者
 - [AKR 安卓开发者社区](https://www.akr-developers.com/) ： 编译教程提供
@@ -165,6 +201,16 @@ act --artifact-server-path /tmp/artifacts -v
 - [xiaoleGun/KernelSU_Action](https://github.com/xiaoleGun/KernelSU_Action) ： 借鉴部分 Github Action
 - [UtsavBalar1231/Drone-scripts](https://github.com/UtsavBalar1231/Drone-scripts) ： 借鉴部分 Github Action
 
-## 许可
+# 贡献者
+
+<a href="https://github.com/DogDayAndroid/Android-Kernel-Builder/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=DogDayAndroid/Android-Kernel-Builder" alt="contributors"/>
+</a>
+
+# Star 历史
+
+[![Star History](https://starchart.cc/DogDayAndroid/Android-Kernel-Builder.svg)](https://starchart.cc/DogDayAndroid/Android-Kernel-Builder)
+
+# 许可
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可。

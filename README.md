@@ -1,24 +1,42 @@
-# Build Your Own Kernel with Github Action
+<div align = center>
+
+<img src="./.assets/DogDayAndroid.png" width="200" height="175" alt="banner">
+
+<h1>Build Your Own Kernel with Github Action</h1>
 
 English | [中文](./README_cn.md)
 
-# Android Kernel Builder
+![License](https://img.shields.io/static/v1?label=License&message=BY-NC-SA&logo=creativecommons&color=green)
+![Language](https://img.shields.io/github/languages/top/DogDayAndroid/Android-Kernel-Builder)
+![Issues](https://img.shields.io/github/issues/DogDayAndroid/Android-Kernel-Builder)
+![Pull Requests](https://img.shields.io/github/issues-pr/DogDayAndroid/Android-Kernel-Builder)
+<br>
 
 This Github Action helps you build kernels. It reads multiple kernel sources from a configuration file and builds them using different toolchains. Additionally, it supports patching the kernel with KernelSU and uploading the built kernel image.
+<br>
 
-## Github Action
+---
+
+**[<kbd> <br>  Configure  <br> </kbd>](#configuration-file-syntax)** 
+**[<kbd> <br>  Quick Start  <br> </kbd>](#how-to-use)** 
+**[<kbd> <br>  Local testing  <br> </kbd>](#local-testing)**
+
+---
+</div>
+
+# Github Action
 
 This action contains two jobs: `Set-repos` and `Build-Kernel`.
 
 The `Set-repos` job reads the kernel sources from the configuration file and outputs them to the `Build-Kernel` job. The `Build-Kernel` job uses the outputted kernel sources to build the kernels and upload the built kernel images.
 
-### Trigger
+## Trigger
 
 | Event name        | Description  |
 | ----------------- | ------------ |
 | workflow_dispatch | Manually run |
 
-### Workflow
+## Workflow
 
 | Build Step                 | Description                                    |
 | -------------------------- | ---------------------------------------------- |
@@ -129,11 +147,27 @@ Here's a table of the parameters in the `params` object:
 
 These configuration details will be used in the build process to automate the creation of specific kernel image files.
 
-## Local testing
+# How to use
+
+This project's basic usage is as follows:
+
+1. Fork this project on GitHub.
+
+2. Modify the `repos.json` file through the Github website or pull it to your local machine and commit the changes.
+
+3. Go to the `Action` page on Github and find `Build kernels`, then `Run workflow`.
+
+4. Wait for the compilation to finish, then download the compiled product from the corresponding page.
+
+5. Use your preferred packaging software to package the kernel ([AnyKernel3](https://github.com/osm0sis/AnyKernel3), [Android-Image-Kitchen](https://github.com/osm0sis/Android-Image-Kitchen), [MagiskBoot](https://github.com/topjohnwu/Magisk/releases), etc.)
+
+![Artifacts](./.assets/artifacts.png)
+
+# Local testing
 
 If you don't want to run the action on `Github`, you can use [nektos/act](https://github.com/nektos/act) to test this workflow locally and output the files.
 
-### Normal local build (kernel source code is fetched using Git)
+## Normal local build (kernel source code is fetched using Git)
 
 This is the recommended local testing process. Simply install [nektos/act](https://github.com/nektos/act) and run the following command:
 
@@ -151,7 +185,7 @@ If there are errors, use the `-v` flag to generate an error report and submit an
 act --artifact-server-path /tmp/artifacts -v
 ```
 
-### Full local build (kernel source code is stored locally)
+## Full local build (kernel source code is stored locally)
 
 If you need to perform a completely local build, consider building as follows:
 
@@ -161,13 +195,23 @@ If you need to perform a completely local build, consider building as follows:
 
 This is just a suggestion, and we do not provide a specific guide.
 
-## Acknowledgments
+# Acknowledgments
 
 - [weishu](https://github.com/tiann) : Developer of KernelSU
 - [AKR Android Developer Community](https://www.akr-developers.com/) ： Provides build tutorials
 - [DogDayAndroid/KSU_Thyme_BuildBot](https://github.com/DogDayAndroid/KSU_Thyme_BuildBot) : Predecessor of this project
 - [xiaoleGun/KernelSU_Action](https://github.com/xiaoleGun/KernelSU_Action) ： Drawing on some Github Actions
 - [UtsavBalar1231/Drone-scripts](https://github.com/UtsavBalar1231/Drone-scripts) ： Drawing on some Github Actions
+
+# Contributor
+
+<a href="https://github.com/DogDayAndroid/Android-Kernel-Builder/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=DogDayAndroid/Android-Kernel-Builder" alt="contributors"/>
+</a>
+
+# Star history
+
+[![Star History](https://starchart.cc/DogDayAndroid/Android-Kernel-Builder.svg)](https://starchart.cc/DogDayAndroid/Android-Kernel-Builder)
 
 # License
 
