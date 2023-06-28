@@ -222,7 +222,7 @@ The `Set-repos` job reads the kernel sources from the configuration file and out
       "binPath": []
     }
   ],
-  "ccache":false,
+  "ccache": false,
   "params": {
     "ARCH": "",
     "CC": "",
@@ -246,9 +246,9 @@ In general, there are the following fields:
 | Field Name   | Description                                                                                                                           |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | kernelSource | Information about the kernel source code, including name, repository address, branch, and device type.                                |
-| withKernelSU | A boolean value indicating whether the `KernelSU` was used.                                                         |
+| withKernelSU | A boolean value indicating whether the `KernelSU` was used.                                                                           |
 | toolchains   | An array containing information about the toolchains needed, including repository address, branch, and name.                          |
-| ccache | A boolean value indicating whether the `ccache` tool was used to speed up compile.                                                         |
+| ccache       | A boolean value indicating whether the `ccache` tool was used to speed up compile.                                                    |
 | params       | An object containing information about the build parameters, including architecture type, cross-compiler, compiler, etc.              |
 | AnyKernel3   | An object containing information about building the kernel flash package, including the `AnyKernel3` repository address, branch, etc. |
 
@@ -270,7 +270,7 @@ This is an array that contains many repository objects of cross-compilation tool
 | ------------------- | ------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `repo`              | String | Toolchain Repository Address | The `git` repository address of the toolchain.                                                                                                                                        |
 | `branch`            | String | Toolchain Branch             | The specified branch of the repository.                                                                                                                                               |
-| `url`          | String | Toolchain Download Url   | The download url of the toolchain.                                                                                                 |
+| `url`               | String | Toolchain Download Url       | The download url of the toolchain.                                                                                                                                                    |
 | `name`              | String | Toolchain Name               | The name of the folder cloned locally, customized.                                                                                                                                    |
 | `binPath`           | Array  | Toolchain Binary File Path   | The path of the `bin` file used during compilation (relative to the path of the cloned folder). It will be converted to an **absolute path** during parameter setting when compiling. |
 
@@ -378,6 +378,33 @@ This project's basic usage is as follows:
 2. Modify the `repos/repos*.json` file through the Github website or pull it to your local machine and commit the changes.
 
 3. Go to the `Action` page on Github and find `Build kernels`, then `Run workflow`.
+
+> **Notice**
+>
+> In this step, you may encounter the following error when executing `softprops/action-gh-release@v1`:
+>
+> ```
+> 👩‍🏭 Creating new GitHub release for tag v20230619.7...
+> ⚠️ GitHub release failed with status: 403
+> undefined
+> retrying... (2 retries remaining)
+> 👩‍🏭 Creating new GitHub release for tag v20230619.7...
+> ⚠️ GitHub release failed with status: 403
+> undefined
+> retrying... (1 retries remaining)
+> 👩‍🏭 Creating new GitHub release for tag v20230619.7...
+> ⚠️ GitHub release failed with status: 403
+> undefined
+> retrying... (0 retries remaining)
+> ❌ Too many retries. Aborting...
+> Error: Too many retries.
+> ```
+>
+> The reason for this error is related to workflow permissions:
+>
+> ![workflow permissions](./.assets/FAQ/workflow%20permissions.png)
+>
+> Complete the permission settings and then you can publish your own `Release` normally.
 
 4. Wait for the compilation to finish, then download the compiled product from the corresponding page.
 

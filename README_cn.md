@@ -378,6 +378,33 @@ make -j$(nproc --all) \
 
 3. 查看 Github 网页的 `Action` 页面，找到 `Build kernels` 并 `Run workflow`
 
+> **注意**
+>
+> 执行这一步骤时, 在用 `softprops/action-gh-release@v1` 发布 `Release`, 您可能会遇到如下报错:
+>
+> ```
+> 👩‍🏭 Creating new GitHub release for tag v20230619.7...
+> ⚠️ GitHub release failed with status: 403
+> undefined
+> retrying... (2 retries remaining)
+> 👩‍🏭 Creating new GitHub release for tag v20230619.7...
+> ⚠️ GitHub release failed with status: 403
+> undefined
+> retrying... (1 retries remaining)
+> 👩‍🏭 Creating new GitHub release for tag v20230619.7...
+> ⚠️ GitHub release failed with status: 403
+> undefined
+> retrying... (0 retries remaining)
+> ❌ Too many retries. Aborting...
+> Error: Too many retries.
+> ```
+>
+> 这是由于您的 `Workflow` 权限导致的:
+>
+> ![workflow permissions](./.assets/FAQ/workflow%20permissions.png)
+>
+> 设置对应权限然后就可以发布属于你自己的 `Release` 了
+
 4. 等待编译完成，即可进入对应页面下载编译产物
 
 5. 使用您喜欢的打包软件进行内核打包([AnyKernel3](https://github.com/osm0sis/AnyKernel3)、[Android-Image-Kitchen](https://github.com/osm0sis/Android-Image-Kitchen)、[MagiskBoot](https://github.com/topjohnwu/Magisk/releases) 等)
