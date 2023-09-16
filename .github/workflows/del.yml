@@ -39,6 +39,8 @@ on:
       dry_run:
         description: "Only log actions, do not perform any delete operations."
         required: false
+  schedule:
+    - cron: '14 13 1 * *'
 
 jobs:
   del_runs:
