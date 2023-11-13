@@ -1,0 +1,28 @@
+From 706669cd7edfe0a44a1c2661d92a8d9a6a6e2ea0 Mon Sep 17 00:00:00 2001
+From: easterNday <849919718@qq.com>
+Date: Thu, 7 Sep 2023 02:12:50 +0800
+Subject: [PATCH 04/13] Devices: add thyme's device tree in easterNday.xml.
+
+Change-Id: I7d5b4af7405a74b314be37d3ec7af11f2e5b420f
+---
+ snippets/easterNday.xml | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/snippets/easterNday.xml b/snippets/easterNday.xml
+index 0500599..444e0d0 100644
+--- a/snippets/easterNday.xml
++++ b/snippets/easterNday.xml
+@@ -2,4 +2,10 @@
+ <manifest>
+   <!-- GApps -->
+   <project path="vendor/gapps" name="DogDayAndroid/android_vendor_gapps" remote="codeberg" groups="easterNday" revision="lineage-20" />
++
++  <!-- Devices -->
++  <project path="device/xiaomi/thyme" remote="codeberg" name="DogDayAndroid/android_device_xiaomi_thyme" revision="lineage-20.0" groups="easterNday,thyme,xiaomi" />
++  <project path="kernel/xiaomi/thyme" remote="codeberg" name="DogDayAndroid/android_kernel_xiaomi_thyme" revision="lineage-20.0" groups="easterNday,thyme,xiaomi" />
++  <project path="vendor/xiaomi/thyme" remote="codeberg" name="DogDayAndroid/android_vendor_xiaomi_thyme" revision="ArbitrarilyTong-13.0" groups="easterNday,thyme,xiaomi" />
++  <project path="hardware/xiaomi" remote="github" name="LineageOS/android_hardware_xiaomi" revision="lineage-20" groups="easterNday,thyme,xiaomi" />
+ </manifest>
+-- 
+2.42.0
+

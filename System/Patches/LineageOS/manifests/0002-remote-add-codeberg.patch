@@ -1,0 +1,27 @@
+From ce7c4d83ffe94092b85972cd5b6db52f63d5f216 Mon Sep 17 00:00:00 2001
+From: easterNday <849919718@qq.com>
+Date: Wed, 6 Sep 2023 12:59:50 +0800
+Subject: [PATCH 02/13] remote: add codeberg
+
+Change-Id: I9aa81d6e42f72f00f195fafcaf39e72d3a1caca1
+---
+ default.xml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/default.xml b/default.xml
+index e4f3baa..6bd94fd 100644
+--- a/default.xml
++++ b/default.xml
+@@ -1,6 +1,9 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <manifest>
+ 
++  <remote  name="codeberg"
++           fetch="https://codeberg.org/" />
++
+   <remote  name="github"
+            fetch="https://ghproxy.com/github.com/" />
+ 
+-- 
+2.42.0
+
