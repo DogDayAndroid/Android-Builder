@@ -1,0 +1,16 @@
+[
+    {
+        "OrangeFox": {
+            "Repo": "https://gitlab.com/OrangeFox/sync.git",
+            "Branch": "11.0"
+        },
+        "Device": {
+            "Repo": "https://codeberg.org/DogDayAndroid/twrp_device_xiaomi_thyme",
+            "Branch": "android-13",
+            "Location": "device/xiaomi/thyme",
+            "DeviceName": "thyme",
+            "Makefile": "twrp_thyme",
+            "BootPartition": "boot"
+        }
+    }
+]

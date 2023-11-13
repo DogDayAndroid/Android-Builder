@@ -1,0 +1,141 @@
+From 74f58b4e423187a37af7952ec51bb2df7c00c835 Mon Sep 17 00:00:00 2001
+From: easterNday <849919718@qq.com>
+Date: Tue, 12 Sep 2023 23:55:33 +0800
+Subject: [PATCH] Photos: Unlimited storage achieved.
+
+* Achieve unlimited cloud storage of pictures by pretending to be a PixelXL model
+* Reference: https://github.com/crdroidandroid/android_frameworks_base/blob/cc484e53adfe6be0bb5582502f49800951ed48b5/core/java/com/android/internal/util/crdroid/PixelPropsUtils.java#L249
+
+Change-Id: If0c6eaa0c795bbcc0513007794d0774ed45eec92
+---
+ core/java/android/app/Instrumentation.java    |  6 ++
+ .../internal/util/easterNday/PropsUtils.java  | 85 +++++++++++++++++++
+ 2 files changed, 91 insertions(+)
+ create mode 100644 core/java/com/android/internal/util/easterNday/PropsUtils.java
+
+diff --git a/core/java/android/app/Instrumentation.java b/core/java/android/app/Instrumentation.java
+index 556058b567f9..02f85b03a049 100644
+--- a/core/java/android/app/Instrumentation.java
++++ b/core/java/android/app/Instrumentation.java
+@@ -64,6 +64,8 @@ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.concurrent.TimeoutException;
+ 
++import com.android.internal.util.easterNday.PropsUtils;
++
+ /**
+  * Base class for implementing application instrumentation code.  When running
+  * with instrumentation turned on, this class will be instantiated for you
+@@ -1242,6 +1244,8 @@ public class Instrumentation {
+         Application app = getFactory(context.getPackageName())
+                 .instantiateApplication(cl, className);
+         app.attach(context);
++        String packageName = context.getPackageName();
++        PropsUtils.setProps(packageName);
+         return app;
+     }
+     
+@@ -1259,6 +1263,8 @@ public class Instrumentation {
+             ClassNotFoundException {
+         Application app = (Application)clazz.newInstance();
+         app.attach(context);
++        String packageName = context.getPackageName();
++        PropsUtils.setProps(packageName);
+         return app;
+     }
+ 
+diff --git a/core/java/com/android/internal/util/easterNday/PropsUtils.java b/core/java/com/android/internal/util/easterNday/PropsUtils.java
+new file mode 100644
+index 000000000000..7b3af205e120
+--- /dev/null
++++ b/core/java/com/android/internal/util/easterNday/PropsUtils.java
+@@ -0,0 +1,85 @@
++package com.android.internal.util.easterNday;
++
++import android.app.Application;
++import android.os.Build;
++import android.os.SystemProperties;
++import android.util.Log;
++
++import java.lang.reflect.Field;
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.Collections;
++import java.util.HashMap;
++import java.util.Map;
++
++public class PropsUtils {
++
++    private static final String TAG = PropsUtils.class.getSimpleName();
++    private static final String DEVICE = "ro.product.device";
++    private static final boolean DEBUG = false;
++
++    private static final Map<String, Object> propsToChangeGeneric;
++    private static final Map<String, Object> propsToChangePixelXL;
++    private static final Map<String, ArrayList<String>> propsToKeep;
++
++
++    private static volatile boolean sIsGms = false;
++    private static volatile boolean sIsFinsky = false;
++
++    static {
++        propsToKeep = new HashMap<>();
++        propsToKeep.put("com.google.android.settings.intelligence", new ArrayList<>(Collections.singletonList("FINGERPRINT")));
++
++        propsToChangeGeneric = new HashMap<>();
++        propsToChangeGeneric.put("TYPE", "user");
++        propsToChangeGeneric.put("TAGS", "release-keys");
++
++        propsToChangePixelXL = new HashMap<>();
++        propsToChangePixelXL.put("BRAND", "google");
++        propsToChangePixelXL.put("MANUFACTURER", "Google");
++        propsToChangePixelXL.put("DEVICE", "marlin");
++        propsToChangePixelXL.put("PRODUCT", "marlin");
++        propsToChangePixelXL.put("HARDWARE", "marlin");
++        propsToChangePixelXL.put("MODEL", "Pixel XL");
++        propsToChangePixelXL.put("ID", "QP1A.191005.007.A3");
++        propsToChangePixelXL.put("FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
++    }
++
++    public static void setProps(String packageName) {
++        propsToChangeGeneric.forEach((k, v) -> setPropValue(k, v));
++
++        if (packageName == null || packageName.isEmpty()) {
++            return;
++        }
++
++        Map<String, Object> propsToChange = new HashMap<>();
++
++        if (packageName.equals("com.google.android.apps.photos")) {
++            propsToChange.putAll(propsToChangePixelXL);
++        }
++
++        if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
++        for (Map.Entry<String, Object> prop : propsToChange.entrySet()) {
++            String key = prop.getKey();
++            Object value = prop.getValue();
++            if (propsToKeep.containsKey(packageName) && propsToKeep.get(packageName).contains(key)) {
++                if (DEBUG) Log.d(TAG, "Not defining " + key + " prop for: " + packageName);
++                continue;
++            }
++            if (DEBUG) Log.d(TAG, "Defining " + key + " prop for: " + packageName);
++            setPropValue(key, value);
++        }
++    }
++
++    private static void setPropValue(String key, Object value) {
++        try {
++            if (DEBUG) Log.d(TAG, "Defining prop " + key + " to " + value.toString());
++            Field field = Build.class.getDeclaredField(key);
++            field.setAccessible(true);
++            field.set(null, value);
++            field.setAccessible(false);
++        } catch (NoSuchFieldException | IllegalAccessException e) {
++            Log.e(TAG, "Failed to set prop " + key, e);
++        }
++    }
++}
+\ No newline at end of file
+-- 
+2.42.0
+
