@@ -1,7 +1,7 @@
-From 706669cd7edfe0a44a1c2661d92a8d9a6a6e2ea0 Mon Sep 17 00:00:00 2001
+From a1ce0ce2a17f3b4bea5dc780d58615f84831c2da Mon Sep 17 00:00:00 2001
 From: easterNday <849919718@qq.com>
 Date: Thu, 7 Sep 2023 02:12:50 +0800
-Subject: [PATCH 04/13] Devices: add thyme's device tree in easterNday.xml.
+Subject: [PATCH 3/3] Devices: add thyme's device tree in easterNday.xml.
 
 Change-Id: I7d5b4af7405a74b314be37d3ec7af11f2e5b420f
 ---
@@ -24,5 +24,5 @@ index 0500599..444e0d0 100644
 +  <project path="hardware/xiaomi" remote="github" name="LineageOS/android_hardware_xiaomi" revision="lineage-20" groups="easterNday,thyme,xiaomi" />
  </manifest>
 -- 
-2.42.0
+2.42.1
 

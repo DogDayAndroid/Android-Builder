@@ -3,9 +3,8 @@ import subprocess
 import xml.etree.ElementTree as ET
 import sys
 
+
 # 解析 manifests 中的 project 字段信息
-
-
 def parse_manifests(manifests_dir):
     project = {}
     for subdir, dirs, files in os.walk(manifests_dir):
@@ -22,15 +21,14 @@ def parse_manifests(manifests_dir):
 
 
 if __name__ == '__main__':
-    manifests_dir = sys.argv[1]
+    root_dir = sys.argv[1]
     patch_search_dir = sys.argv[2]
-    root_dir = sys.argv[3]
+    manifests_dir = os.path.join(root_dir, ".repo", "manifests")
 
     project = parse_manifests(manifests_dir)
     for item in os.scandir(patch_search_dir):
         if item.is_dir():
-            # print(item.path)
-            # print(item.name)
+            print(item.path, item.name, project[item.name])
             apply_dir = os.path.join(root_dir, project[item.name])
             patch_dir = os.path.join(patch_search_dir, item.name)
             # 改变当前工作目录
@@ -41,5 +39,6 @@ if __name__ == '__main__':
                     "git am %s/*.patch" % (patch_dir), shell=True, stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError as e:
                 output = e.output
-            # 输出命令的输出
-            print(output.decode())
+            finally:
+                # 输出命令的输出
+                print(output.decode())

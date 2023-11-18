@@ -1,0 +1,35 @@
+From 28a1220360ec8f403079f9668baf67e9c1eafb51 Mon Sep 17 00:00:00 2001
+From: easterNday <849919718@qq.com>
+Date: Sat, 18 Nov 2023 09:58:46 +0800
+Subject: [PATCH] Env: allow use custom TWRP
+
+* Allow CUSTOM_MAGISKBOOT and CUSTOM_TWRP to be set and read.
+* Used to specify a custom recovery.
+* Both of them must exist at the same time to take effect.
+* They should all be exported using absolute paths.
+
+- Linkage file: build/tools/releasetools/add_img_to_target_files.py
+
+Change-Id: Ic5e57f8550db3dc9ad95fbdf66b46b3d2c7823bd
+---
+ ui/build/ninja.go | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/ui/build/ninja.go b/ui/build/ninja.go
+index dab1a9b58..d2bc240ba 100644
+--- a/ui/build/ninja.go
++++ b/ui/build/ninja.go
+@@ -127,6 +127,10 @@ func runNinjaForBuild(ctx Context, config Config) {
+ 			"TMPDIR",
+ 			"USER",
+ 
++			// Custom TWRP
++			"CUSTOM_MAGISKBOOT",
++			"CUSTOM_TWRP",
++
+ 			// TODO: remove these carefully
+ 			// Options for the address sanitizer.
+ 			"ASAN_OPTIONS",
+-- 
+2.42.1
+

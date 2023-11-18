@@ -8,6 +8,7 @@ echo "             easterNday               "
 echo "--------------------------------------"
 echo
 
+# set -xe
 set -e
 
 # 获取脚本所在路径
@@ -47,7 +48,7 @@ syncRepos() {
     if [ -d $ROOT/LineageOS ]; then
         cd $ROOT/LineageOS
         echo "--> Syncing repos"
-        repo sync -c --force-sync --no-clone-bundle --no-tags -j4
+        repo sync -c --force-sync --no-clone-bundle --no-tags -j16
         echo
     fi
 }
@@ -78,8 +79,10 @@ applyPatches() {
     cd $ROOT/Patches/LineageOS
 
     echo "--> Applying personal patches"
-    # bash $BL/apply-patches.sh $BL personal
-    python $ROOT/Patches/apply.py $ROOT/LineageOS/.repo/manifests $ROOT/Patches/LineageOS/personal $ROOT/LineageOS
+    # Device camouflage patch
+    python $ROOT/Patches/apply.py $ROOT/LineageOS $ROOT/Patches/LineageOS/mask
+    # Custom recovery patch
+    python $ROOT/Patches/apply.py $ROOT/LineageOS $ROOT/Patches/LineageOS/custom_recovery
     echo
 }
 
@@ -87,7 +90,7 @@ applyPatches() {
 setupEnv() {
     echo "--> Setting up build environment"
     cd $ROOT/LineageOS
-    source build/envsetup.sh &>/dev/null
+    source build/envsetup.sh
     # mkdir -p $OUTPUTS
     echo
 }
@@ -97,7 +100,9 @@ build() {
     echo "--> Building DogDayAndroid"
     export RELEASE_TYPE=RELEASE
     lunch lineage_thyme-userdebug
-    mka bacon
+    croot
+    # mka clobber
+    mka bacon -j20 2>&1 | tee build.log
     # mv $OUT/system.img $BD/system-treble_arm64_bvN-slim.img
     echo
 }

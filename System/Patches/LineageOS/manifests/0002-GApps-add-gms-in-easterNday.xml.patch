@@ -1,29 +1,20 @@
-From afde359fa22093d8d10d44aa8c5d0828e79c1115 Mon Sep 17 00:00:00 2001
+From 832a0451a9d40eba88b62d175c73c2189a63d62d Mon Sep 17 00:00:00 2001
 From: easterNday <849919718@qq.com>
 Date: Thu, 7 Sep 2023 02:12:12 +0800
-Subject: [PATCH 03/13] GApps: add gms in easterNday.xml.
+Subject: [PATCH 2/3] GApps: add gms in easterNday.xml.
 
 Change-Id: Idfe12b0f0de152a512d4ef6420239534ac9be4cf
 ---
- default.xml             | 3 ++-
+ default.xml             | 1 +
  snippets/easterNday.xml | 5 +++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ 2 files changed, 6 insertions(+)
  create mode 100644 snippets/easterNday.xml
 
 diff --git a/default.xml b/default.xml
-index 6bd94fd..7387af4 100644
+index 0c5b9af..e3ec203 100644
 --- a/default.xml
 +++ b/default.xml
-@@ -4,7 +4,7 @@
-   <remote  name="codeberg"
-            fetch="https://codeberg.org/" />
- 
--  <remote  name="github"
-+    <remote  name="github"
-            fetch="https://ghproxy.com/github.com/" />
- 
-   <remote  name="lineage"
-@@ -1136,4 +1136,5 @@
+@@ -1133,4 +1133,5 @@
  
    <include name="snippets/lineage.xml" />
    <include name="snippets/pixel.xml" />
@@ -41,5 +32,5 @@ index 0000000..0500599
 +  <project path="vendor/gapps" name="DogDayAndroid/android_vendor_gapps" remote="codeberg" groups="easterNday" revision="lineage-20" />
 +</manifest>
 -- 
-2.42.0
+2.42.1
 
