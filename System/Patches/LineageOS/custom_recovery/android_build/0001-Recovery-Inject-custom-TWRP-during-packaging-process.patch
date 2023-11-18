@@ -1,0 +1,76 @@
+From 75a690c8b292a54ca7c821f087639ae30597b095 Mon Sep 17 00:00:00 2001
+From: easterNday <849919718@qq.com>
+Date: Sat, 18 Nov 2023 12:46:00 +0800
+Subject: [PATCH] Recovery: Inject custom TWRP during packaging process
+
+* Use custom recovery by export CUSTOM_TWRP to env var.
+* Specify the MagiskBoot by export CUSTOM_MAGISKBOOT to env var.
+* Both of the above options must be specified to take effect, and an absolute path must be used.
+
+- Linkage file: build/soong/ui/build/ninja.go
+
+Change-Id: I43c48a9b490cad2ea3c5fa0b9ea6e4cf6dee9065
+---
+ tools/releasetools/add_img_to_target_files.py | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/tools/releasetools/add_img_to_target_files.py b/tools/releasetools/add_img_to_target_files.py
+index 09f69d040..1ff1a17ee 100644
+--- a/tools/releasetools/add_img_to_target_files.py
++++ b/tools/releasetools/add_img_to_target_files.py
+@@ -844,6 +844,52 @@ def AddImagesToTargetFiles(filename):
+           if output_zip:
+             boot_image.AddToZip(output_zip)
+ 
++      def useCustomRecovery(boot_image_path):
++        magiskboot = os.getenv('CUSTOM_MAGISKBOOT')
++        recovery = os.getenv('CUSTOM_TWRP')
++        # Skip patching if relevant environment variables are defined
++        if not magiskboot or not recovery:
++          logger.info("[Custom Recovery] Skip...")
++          return
++        # Store the original working directory and switch to the new directory
++        origin_pwd = os.getcwd()
++        new_pwd = os.path.join(os.getcwd(), "tmp")
++        common.RunAndCheckOutput(["mkdir", "-p", new_pwd])
++        os.chdir(new_pwd)
++
++        # magiskboot unpack -n recovery.img
++        common.RunAndCheckOutput([magiskboot, "unpack", "-n", recovery])
++
++        # Exit if there are no required files
++        if not os.path.exists("ramdisk.cpio"):
++          logger.info("[Custom Recovery] It seems there is a problem with the Recovery you provided!!!")
++          common.RunAndCheckOutput(["rm", "-rf", new_pwd])
++          os.chdir(origin_pwd)
++          return
++
++        logger.info("[Custom Recovery]\tMagiskBoot:{}\tRecvoery:{}\tUse custom recovery!!!".format(magiskboot, recovery))
++        # Replace recovery
++        common.RunAndCheckOutput(["cp", "-f", "ramdisk.cpio", "ramdisk-ofrp.cpio"])
++        logger.info("[Custom Recovery] Copy {} to {}".format("ramdisk.cpio", "ramdisk-ofrp.cpio"))
++        common.RunAndCheckOutput(["rm", "-f", "ramdisk.cpio"])
++        logger.info("[Custom Recovery] Delete {}".format("ramdisk.cpio"))
++        common.RunAndCheckOutput(["rm", "-f", "kernel", "dtb", "kernel_dtb"])
++        logger.info("[Custom Recovery] Delete {} {} {}".format("kernel", "dtb", "kernel_dtb"))
++        common.RunAndCheckOutput([magiskboot, "unpack", "-h", "-n", boot_image_path])
++        logger.info("[Custom Recovery] Unpack {}".format(boot_image_path))
++        common.RunAndCheckOutput(["cp", "-f", "ramdisk-ofrp.cpio", "ramdisk.cpio"])
++        logger.info("[Custom Recovery] Copy {} to {}".format("ramdisk-ofrp.cpio", "ramdisk.cpio"))
++        common.RunAndCheckOutput([magiskboot, "repack", "-n", boot_image_path])
++        logger.info("[Custom Recovery] Repack {}".format(boot_image_path))
++        common.RunAndCheckOutput(["mv", "-f", "new-boot.img", boot_image_path])
++        logger.info("[Custom Recovery] Move {} to {}".format("new-boot.img", boot_image_path))
++        common.RunAndCheckOutput(["rm", "-rf", new_pwd])
++        common.RunAndCheckOutput([magiskboot, "cleanup"])
++        logger.info("[Custom Recovery] Cleanup".format("new-boot.img", boot_image_path))
++        os.chdir(origin_pwd)
++      # Use prebuilt twrp image if it exists.
++      useCustomRecovery(boot_image_path)
++
+   if has_init_boot:
+     banner("init_boot")
+     init_boot_image = common.GetBootableImage(
+-- 
+2.42.1
+
