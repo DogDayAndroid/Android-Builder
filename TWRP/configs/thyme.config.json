@@ -2,7 +2,7 @@
     {
         "OrangeFox": {
             "Repo": "https://gitlab.com/OrangeFox/sync.git",
-            "Branch": "11.0"
+            "Branch": "12.1"
         },
         "Device": {
             "Repo": "https://codeberg.org/DogDayAndroid/twrp_device_xiaomi_thyme",

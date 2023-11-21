@@ -10,18 +10,18 @@ on:
 
 jobs:
   Read-configuration:
-    name: 🏧 Parse *.config.json
+    name: ®️ Parse *.config.json
     runs-on: ubuntu-latest
     outputs:
       CONFIGS: ${{ steps.generate-matrix.outputs.CONFIGS }}
       BUILD_DATE: ${{ steps.generate-builddate.outputs.BUILDDATE }}
     steps:
       # This action checks-out your CONFIGSitory under $GITHUB_WORKSPACE, so your workflow can access it.
-      - name: ♈ Checkout
+      - name: 🔴 Checkout
         uses: actions/checkout@v4
 
       # Match the configuration files in the CONFIGS directory, read the contents and merge them into an array.
-      - name: ♉ Generate Matrix
+      - name: 🟠 Generate Matrix
         id: generate-matrix
         run: |
           echo "CONFIGS<<EOF" >> $GITHUB_OUTPUT
@@ -29,12 +29,12 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       # Set compile time.
-      - name: ♊ Set builddate
+      - name: 🟡 Set builddate
         id: generate-builddate
         run: echo "BUILDDATE=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
 
   Build-TWRP:
-    name: 🛄 Build TWRP
+    name: ©️ Build TWRP
     runs-on: ubuntu-latest
     needs:
       - Read-configuration
@@ -66,12 +66,15 @@ jobs:
       CCACHE_DIR: "${{ github.workspace }}/ccache"
     steps:
       # Clean up the workspace and make room for compilation
-      - name: ♋ Cleanup
+      - name: ♈ Cleanup
         uses: rokibhasansagar/slimhub_actions@main
+        with:
+          retain: "java_tools,android_sdk"
 
-      - name: ♌ Prepare the build environment
+      - name: ♉ Prepare the build environment
         run: |
           cd ~
+          sudo apt update -y
           sudo apt install git aria2 -y
           git clone https://gitlab.com/OrangeFox/misc/scripts
           cd scripts
@@ -79,35 +82,33 @@ jobs:
           sed -i 's/cd -/cd ../g' setup/install_android_sdk.sh
           sudo bash setup/install_android_sdk.sh
 
-      - name: ♍ Sync OrangeFox sources and minimal manifest
+      - name: ♊ Sync OrangeFox sources and minimal manifest
         run: |
           git clone ${{ env.OF_SYNC_REPO }} sync
           cd sync
           ./orangefox_sync.sh --branch ${{ env.OF_SYNC_BRANCH }} --path ${{ env.OF_LOCATION }}
 
-      - name: ♎ Place device trees and kernel
+      - name: ♋ Place device trees and kernel
         working-directory: ${{ env.OF_LOCATION }}
         run: |
           git clone --recursive --depth=1 -j $(nproc) --branch ${{ env.DEVICE_BRANCH }} ${{ env.DEVICE_REPO }} ${{ env.DEVICE_LOCATION }}
 
-      - name: ♏ Set Swap Space
+      - name: ♌ Set Swap Space
         uses: pierotofy/set-swap-space@master
         with:
           swap-size-gb: 12
 
-      - name: ♐ Build it
+      - name: ♍ Build it
         working-directory: ${{ env.OF_LOCATION }}
         continue-on-error: true
         run: |
           set +e
           source build/envsetup.sh
           export ALLOW_MISSING_DEPENDENCIES=true
-          export FOX_BUILD_DEVICE=thyme
-          export LC_ALL="C"
           set -e
-          lunch ${{ env.DEVICE_MAKEFILE }}-eng && mka adbd ${{ env.DEVICE_BOOT_PARTITION }}image -j$(nproc --all)
+          lunch ${{ env.DEVICE_MAKEFILE }}-eng && mka adbd ${{ env.DEVICE_BOOT_PARTITION }}image
 
-      - name: ♑Take the OrangeFox build
+      - name: ♎ Take the OrangeFox build
         uses: actions/upload-artifact@v3
         with:
           name: OrangeFox
@@ -116,7 +117,7 @@ jobs:
             ${{ env.OUT_DIR }}/target/product/${{ env.DEVICE_NAME }}/*${{ env.DEVICE_NAME }}.img
             ${{ env.OUT_DIR }}/target/product/${{ env.DEVICE_NAME }}/*${{ env.DEVICE_NAME }}.zip
 
-      - name: ♒ Create GitHub Release => (${{ env.BUILD_DATE }})
+      - name: ♏ Create GitHub Release => (${{ env.BUILD_DATE }})
         continue-on-error: true
         uses: softprops/action-gh-release@v1
         with:
