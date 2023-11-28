@@ -1,11 +1,11 @@
 [
   {
     "kernelSource": {
-      "name": "Mi6X",
-      "repo": "https://github.com/Diva-Room/Miku_kernel_xiaomi_wayne",
-      "branch": "TDA",
-      "device": "wayne",
-      "defconfig": "vendor/wayne_defconfig"
+      "name": "test-rad",
+      "repo": "https://github.com/cly-build/mt6785.git",
+      "branch": "rad-14",
+      "device": "rosemary",
+      "defconfig": "rosemary_defconfig"
     },
     "toolchains": [
       {
