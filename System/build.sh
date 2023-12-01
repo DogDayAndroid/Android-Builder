@@ -23,7 +23,7 @@ initRepos() {
         mkdir -p $ROOT/LineageOS
         cd $ROOT/LineageOS
         echo "--> Initializing LineageOS Repo"
-        repo init -u https://github.com/LineageOS/android -b lineage-20.0
+        repo init -u https://github.com/LineageOS/android -b lineage-20.0 --git-lfs
         echo
     fi
 }
@@ -101,8 +101,8 @@ build() {
     export RELEASE_TYPE=RELEASE
     lunch lineage_thyme-userdebug
     croot
-    # mka clobber
-    mka bacon -j20 2>&1 | tee build.log
+    mka clobber
+    mka bacon -j$(( $(nproc --all) / 2 )) 2>&1 | tee build.log
     # mv $OUT/system.img $BD/system-treble_arm64_bvN-slim.img
     echo
 }
