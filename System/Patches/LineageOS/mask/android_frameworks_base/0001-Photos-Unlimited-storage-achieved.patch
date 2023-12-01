@@ -1,18 +1,100 @@
-From 74f58b4e423187a37af7952ec51bb2df7c00c835 Mon Sep 17 00:00:00 2001
+From eeb47bd995c0b8950f08a091f7294bb44f3e398e Mon Sep 17 00:00:00 2001
 From: easterNday <849919718@qq.com>
-Date: Tue, 12 Sep 2023 23:55:33 +0800
+Date: Mon, 27 Nov 2023 12:46:48 +0800
 Subject: [PATCH] Photos: Unlimited storage achieved.
 
 * Achieve unlimited cloud storage of pictures by pretending to be a PixelXL model
-* Reference: https://github.com/crdroidandroid/android_frameworks_base/blob/cc484e53adfe6be0bb5582502f49800951ed48b5/core/java/com/android/internal/util/crdroid/PixelPropsUtils.java#L249
+    - Reference: https://github.com/crdroidandroid/android_frameworks_base/blob/cc484e53adfe6be0bb5582502f49800951ed48b5/core/java/com/android/internal/util/crdroid/PixelPropsUtils.java#L249
+    - Reference: https://github.com/crdroidandroid/android_frameworks_base/blob/e0408b1c58f026f753950d1906d234cd400c8ccd/core/java/android/app/ApplicationPackageManager.java#L882-L890
+    - Reference: https://github.com/BaltiApps/Pixelify-Google-Photos
 
-Change-Id: If0c6eaa0c795bbcc0513007794d0774ed45eec92
+Change-Id: I50857dd69fde36d0124f1d4dd241ae97088acd26
 ---
+ .../app/ApplicationPackageManager.java        | 66 ++++++++++++++
  core/java/android/app/Instrumentation.java    |  6 ++
  .../internal/util/easterNday/PropsUtils.java  | 85 +++++++++++++++++++
- 2 files changed, 91 insertions(+)
+ 3 files changed, 157 insertions(+)
  create mode 100644 core/java/com/android/internal/util/easterNday/PropsUtils.java
 
+diff --git a/core/java/android/app/ApplicationPackageManager.java b/core/java/android/app/ApplicationPackageManager.java
+index 475e0f4cb05b..d5f7949d380b 100644
+--- a/core/java/android/app/ApplicationPackageManager.java
++++ b/core/java/android/app/ApplicationPackageManager.java
+@@ -764,8 +764,74 @@ public class ApplicationPackageManager extends PackageManager {
+         }
+     }
+ 
++    private static final String[] featuresPixel = {
++            "com.google.android.apps.photos.PIXEL_2019_PRELOAD",
++            "com.google.android.apps.photos.PIXEL_2019_MIDYEAR_PRELOAD",
++            "com.google.android.apps.photos.PIXEL_2018_PRELOAD",
++            "com.google.android.apps.photos.PIXEL_2017_PRELOAD",
++            "com.google.android.feature.PIXEL_2020_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2020_MIDYEAR_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2019_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2019_MIDYEAR_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2018_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2017_EXPERIENCE",
++            "com.google.android.feature.PIXEL_EXPERIENCE",
++            "com.google.android.feature.GOOGLE_BUILD",
++            "com.google.android.feature.GOOGLE_EXPERIENCE"
++    };
++
++    private static final String[] featuresPixelOthers = {
++            "com.google.android.feature.ASI",
++            "com.google.android.feature.ANDROID_ONE_EXPERIENCE",
++            "com.google.android.feature.GOOGLE_FI_BUNDLED",
++            "com.google.android.feature.LILY_EXPERIENCE",
++            "com.google.android.feature.TURBO_PRELOAD",
++            "com.google.android.feature.WELLBEING",
++            "com.google.lens.feature.IMAGE_INTEGRATION",
++            "com.google.lens.feature.CAMERA_INTEGRATION",
++            "com.google.photos.trust_debug_certs",
++            "com.google.android.feature.AER_OPTIMIZED",
++            "com.google.android.feature.NEXT_GENERATION_ASSISTANT",
++            "android.software.game_service",
++            "com.google.android.feature.EXCHANGE_6_2",
++            "com.google.android.apps.dialer.call_recording_audio",
++            "com.google.android.apps.dialer.SUPPORTED"
++    };
++
++    private static final String[] featuresP23 = {
++            "com.google.android.feature.PIXEL_2024_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2024_MIDYEAR_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2023_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2023_MIDYEAR_EXPERIENCE"
++    };
++
++    private static final String[] featuresTensor = {
++            "com.google.android.feature.PIXEL_2022_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2022_MIDYEAR_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2021_EXPERIENCE",
++            "com.google.android.feature.PIXEL_2021_MIDYEAR_EXPERIENCE"
++    };
++
++    private static final String[] featuresNexus = {
++            "com.google.android.apps.photos.NEXUS_PRELOAD",
++            "com.google.android.apps.photos.nexus_preload",
++            "com.google.android.feature.PIXEL_EXPERIENCE",
++            "com.google.android.feature.GOOGLE_BUILD",
++            "com.google.android.feature.GOOGLE_EXPERIENCE"
++    };
++
+     @Override
+     public boolean hasSystemFeature(String name) {
++        String packageName = ActivityThread.currentPackageName();
++        if (packageName != null &&
++                packageName.equals("com.google.android.apps.photos") &&
++                SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true)) {
++            if (Arrays.asList(featuresPixel).contains(name)) return false;
++            if (Arrays.asList(featuresPixelOthers).contains(name)) return true;
++            if (Arrays.asList(featuresP23).contains(name)) return false;
++            if (Arrays.asList(featuresTensor).contains(name)) return false;
++            if (Arrays.asList(featuresNexus).contains(name)) return true;
++        }
+         return hasSystemFeature(name, 0);
+     }
+ 
 diff --git a/core/java/android/app/Instrumentation.java b/core/java/android/app/Instrumentation.java
 index 556058b567f9..02f85b03a049 100644
 --- a/core/java/android/app/Instrumentation.java
@@ -137,5 +219,5 @@ index 000000000000..7b3af205e120
 +}
 \ No newline at end of file
 -- 
-2.42.0
+2.43.0
 
