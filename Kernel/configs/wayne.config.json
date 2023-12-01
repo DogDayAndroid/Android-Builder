@@ -1,9 +1,9 @@
 [
   {
     "kernelSource": {
-      "name": "test-rad",
+      "name": "radkernel",
       "repo": "https://github.com/cly-build/mt6785.git",
-      "branch": "rad-14",
+      "branch": "rad",
       "device": "rosemary",
       "defconfig": "rosemary_defconfig"
     },
