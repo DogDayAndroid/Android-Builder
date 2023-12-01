@@ -1,11 +1,11 @@
 [
   {
     "kernelSource": {
-      "name": "Xiaomi10S（Proton）",
-      "repo": "https://codeberg.org/DogDayAndroid/android_kernel_xiaomi_thyme",
-      "branch": "lineage-20.0",
-      "device": "thyme",
-      "defconfig": "thyme_defconfig"
+      "name": "Redmi Note 10s（Proton）",
+      "repo": "https://github.com/cly-build/mt6785.git",
+      "branch": "lineage-21",
+      "device": "rosemary",
+      "defconfig": "rosemary_defconfig"
     },
     "enableCcache": true,
     "toolchains": [
@@ -41,16 +41,16 @@
       "use": true,
       "release": true
     },
-    "enableKernelSU": true,
+    "enableKernelSU": false,
     "enableLXC": false
   },
   {
     "kernelSource": {
-      "name": "Xiaomi10S（Google）",
-      "repo": "https://codeberg.org/DogDayAndroid/android_kernel_xiaomi_thyme",
-      "branch": "lineage-20.0",
-      "device": "thyme",
-      "defconfig": "thyme_defconfig"
+      "name": "Redmi Note 10S（Google）",
+      "repo": "https://github.com/cly-build/mt6785.git",
+      "branch": "lineage-21",
+      "device": "rosemary",
+      "defconfig": "rosemary_defconfig"
     },
     "toolchains": [
       {
@@ -83,11 +83,11 @@
       "use": true,
       "release": true,
       "custom": {
-        "repo": "https://github.com/easterNday/AnyKernel3/",
-        "branch": "thyme"
+        "repo": "https://github.com/clyfly/AnyKernel3.git",
+        "branch": "master"
       }
     },
-    "enableKernelSU": true,
+    "enableKernelSU": false,
     "enableLXC": false
   }
 ]
