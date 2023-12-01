@@ -2,8 +2,8 @@
   {
     "kernelSource": {
       "name": "RedmiNote10s（Proton）",
-      "repo": "https://github.com/cly-build/mt6785.git",
-      "branch": "lineage-21",
+      "repo": "https://github.com/cly-build/kernel_xiaomi_rosemary.git",
+      "branch": "rad",
       "device": "rosemary",
       "defconfig": "rosemary_defconfig"
     },
@@ -47,8 +47,8 @@
   {
     "kernelSource": {
       "name": "RedmiNote10S（Google）",
-      "repo": "https://github.com/cly-build/mt6785.git",
-      "branch": "lineage-21",
+      "repo": "https://github.com/cly-build/kernel_xiaomi_rosemary.git",
+      "branch": "rad",
       "device": "rosemary",
       "defconfig": "rosemary_defconfig"
     },
