@@ -1,7 +1,7 @@
 [
   {
     "kernelSource": {
-      "name": "Redmi Note 10s（Proton）",
+      "name": "RedmiNote10s（Proton）",
       "repo": "https://github.com/cly-build/mt6785.git",
       "branch": "lineage-21",
       "device": "rosemary",
@@ -46,7 +46,7 @@
   },
   {
     "kernelSource": {
-      "name": "Redmi Note 10S（Google）",
+      "name": "RedmiNote10S（Google）",
       "repo": "https://github.com/cly-build/mt6785.git",
       "branch": "lineage-21",
       "device": "rosemary",
