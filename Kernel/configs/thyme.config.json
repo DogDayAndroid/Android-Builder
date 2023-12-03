@@ -1,7 +1,7 @@
 [
   {
     "kernelSource": {
-      "name": "RedmiNote10s（Proton）",
+      "name": "RedmiNote10s（Magisk）",
       "repo": "https://github.com/cly-build/mt6785.git",
       "branch": "rad",
       "device": "rosemary",
@@ -46,7 +46,7 @@
   },
   {
     "kernelSource": {
-      "name": "RedmiNote10S（Google）",
+      "name": "RedmiNote10S（Ksu）",
       "repo": "https://github.com/cly-build/mt6785.git",
       "branch": "rad",
       "device": "rosemary",
@@ -88,6 +88,6 @@
       }
     },
     "enableKernelSU": true,
-    "enableLXC": false
+    "enableLXC": true
   }
 ]
