@@ -3,7 +3,7 @@
     "kernelSource": {
       "name": "RedmiNote10s（Magisk）",
       "repo": "https://github.com/cly-build/mt6785.git",
-      "branch": "331",
+      "branch": "rad",
       "device": "rosemary",
       "defconfig": "rad_defconfig"
     },
@@ -48,7 +48,7 @@
     "kernelSource": {
       "name": "RedmiNote10S（Ksu）",
       "repo": "https://github.com/cly-build/mt6785.git",
-      "branch": "331",
+      "branch": "rad",
       "device": "rosemary",
       "defconfig": "rad_defconfig"
     },
@@ -61,7 +61,7 @@
       },
       {
         "repo": "https://gitlab.com/ThankYouMario/android_prebuilts_clang-standalone/",
-        "branch": "14",
+        "branch": "17",
         "name": "clang",
         "binaryEnv": [
           "bin"
