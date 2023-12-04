@@ -2,10 +2,10 @@
   {
     "kernelSource": {
       "name": "RedmiNote10s（Magisk）",
-      "repo": "https://github.com/cly-build/mt6785.git",
+      "repo": "https://github.com/cly-build/rad-kernel-rosemary-R.git",
       "branch": "rad",
       "device": "rosemary",
-      "defconfig": "rad_defconfig"
+      "defconfig": "rosemary_defconfig"
     },
     "enableCcache": true,
     "toolchains": [
@@ -47,10 +47,10 @@
   {
     "kernelSource": {
       "name": "RedmiNote10S（Ksu）",
-      "repo": "https://github.com/cly-build/mt6785.git",
+      "repo": "https://github.com/cly-build/rad-kernel-rosemary-R.git",
       "branch": "rad",
       "device": "rosemary",
-      "defconfig": "rad_defconfig"
+      "defconfig": "rosemary_defconfig"
     },
     "toolchains": [
       {
