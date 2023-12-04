@@ -3,7 +3,7 @@
     "kernelSource": {
       "name": "RedmiNote10s（Magisk）",
       "repo": "https://github.com/cly-build/rad-kernel-rosemary-R.git",
-      "branch": "genome",
+      "branch": "genom",
       "device": "rosemary",
       "defconfig": "rosemary_defconfig"
     },
@@ -48,7 +48,7 @@
     "kernelSource": {
       "name": "RedmiNote10S（Ksu）",
       "repo": "https://github.com/cly-build/rad-kernel-rosemary-R.git",
-      "branch": "genome",
+      "branch": "genom",
       "device": "rosemary",
       "defconfig": "rosemary_defconfig"
     },
