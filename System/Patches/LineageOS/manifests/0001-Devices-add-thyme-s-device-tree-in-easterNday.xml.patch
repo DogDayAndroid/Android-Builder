@@ -1,0 +1,56 @@
+From 550521767ee7c6c6b6e3a42fda9091ca466e94b4 Mon Sep 17 00:00:00 2001
+From: easterNday <849919718@qq.com>
+Date: Wed, 6 Sep 2023 12:59:50 +0800
+Subject: [PATCH] Devices: add thyme's device tree in easterNday.xml.
+
+* Add Codeberg & Gitlab remote;
+* GApps: add gms in easterNday.xml;
+* Use common device tree for thyme.
+
+Change-Id: I6d29dae4eed4f0c870865eb415306ab85a9892c8
+---
+ default.xml             |  1 +
+ snippets/easterNday.xml | 21 +++++++++++++++++++++
+ 2 files changed, 22 insertions(+)
+ create mode 100644 snippets/easterNday.xml
+
+diff --git a/default.xml b/default.xml
+index 9afcbf2..8c7da2a 100644
+--- a/default.xml
++++ b/default.xml
+@@ -1130,4 +1130,5 @@
+ 
+   <include name="snippets/lineage.xml" />
+   <include name="snippets/pixel.xml" />
++  <include name="snippets/easterNday.xml" />
+ </manifest>
+diff --git a/snippets/easterNday.xml b/snippets/easterNday.xml
+new file mode 100644
+index 0000000..8c5b8de
+--- /dev/null
++++ b/snippets/easterNday.xml
+@@ -0,0 +1,21 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<manifest>
++  <!-- Remote -->
++  <remote name="codeberg" fetch="https://codeberg.org/" sync-c="true" sync-j="4" />
++  <remote name="gitlab" fetch="https://gitlab.com/" sync-c="true" sync-j="4" />
++
++  <!-- GApps -->
++  <project path="vendor/gapps" remote="gitlab" name="MindTheGapps/vendor_gapps" revision="tau"/>
++
++  <!-- sm8250 -->
++  <project path="device/xiaomi/sm8250-common" remote="github" name="LineageOS/android_device_xiaomi_sm8250-common" revision="lineage-20" groups="easterNday,thyme,xiaomi" />
++  <project path="kernel/xiaomi/sm8250" remote="github" name="LineageOS/android_kernel_xiaomi_sm8250" revision="lineage-20" groups="easterNday,thyme,xiaomi" />
++  <project path="vendor/xiaomi/sm8250-common" remote="github" name="xiaomi-sm8250-devs/proprietary_vendor_xiaomi_sm8250-common" revision="lineage-20" groups="easterNday,thyme,xiaomi" />
++
++  <!-- Devices -->
++  <project path="device/xiaomi/thyme" remote="codeberg" name="easterNday/android_device_xiaomi_thyme" revision="lineage-20" groups="easterNday,thyme,xiaomi" />
++  <project path="vendor/xiaomi/thyme" remote="codeberg" name="easterNday/proprietary_vendor_xiaomi_thyme" revision="lineage-20" groups="easterNday,thyme,xiaomi" />
++
++  <!-- Xiaomi -->
++  <project path="hardware/xiaomi" remote="github" name="LineageOS/android_hardware_xiaomi" revision="lineage-20" groups="easterNday,thyme,xiaomi" />
++</manifest>
+-- 
+2.43.0
+
