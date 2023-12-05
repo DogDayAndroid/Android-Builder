@@ -3,7 +3,7 @@
     "kernelSource": {
       "name": "radkernel",
       "repo": "https://github.com/cly-build/rad-kernel-rosemary-R.git",
-      "branch": "testmiui",
+      "branch": "testmmiui",
       "device": "rosemary",
       "defconfig": "rosemary_defconfig"
     },
