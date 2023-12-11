@@ -3,9 +3,9 @@
     "kernelSource": {
       "name": "radkernel",
       "repo": "https://github.com/cly-build/rad-kernel-rosemary-R.git",
-      "branch": "testmmiui",
+      "branch": "rad",
       "device": "rosemary",
-      "defconfig": "rosemary_defconfig"
+      "defconfig": "rad_defconfig"
     },
     "toolchains": [
       {
@@ -57,7 +57,11 @@
     },
     "AnyKernel3": {
       "use": true,
-      "release": true
+      "release": true,
+      "custom": {
+        "repo": "https://github.com/clyfly/AnyKernel3.git",
+        "branch": "master"
+      }
     },
     "enableKernelSU": true,
     "enableLXC": false
