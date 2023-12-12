@@ -50,7 +50,7 @@
       },
       {
         "kernelSource": {
-          "name": "Rad-Kernel",
+          "name": "Rad-Kernel-ksu",
           "repo": "https://github.com/cly-build/mt6785.git",
           "branch": "focalor",
           "device": "rosemary",

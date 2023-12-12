@@ -50,7 +50,7 @@
     },
     {
       "kernelSource": {
-        "name": "Rad-Kernel-R",
+        "name": "Rad-Kernel-R-ksu",
         "repo": "https://github.com/cly-build/rad-kernel-rosemary-R",
         "branch": "rad",
         "device": "rosemary",
