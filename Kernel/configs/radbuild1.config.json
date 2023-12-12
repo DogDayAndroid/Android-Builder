@@ -7,7 +7,7 @@
           "device": "rosemary",
           "defconfig": "rad_defconfig"
         },
-        "enableCcache": true,
+        "enableCcache": false,
         "toolchains": [
           {
             "repo": "https://github.com/kdrag0n/proton-clang",
@@ -56,7 +56,7 @@
           "device": "rosemary",
           "defconfig": "rad_defconfig"
         },
-        "enableCcache": true,
+        "enableCcache": false,
         "toolchains": [
           {
             "repo": "https://github.com/kdrag0n/proton-clang",
