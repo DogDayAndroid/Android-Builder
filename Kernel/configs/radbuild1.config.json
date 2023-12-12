@@ -1,9 +1,9 @@
 [
     {
         "kernelSource": {
-          "name": "RedmiNote10s（Magisk）",
+          "name": "Rad-Kernel",
           "repo": "https://github.com/cly-build/mt6785.git",
-          "branch": "test",
+          "branch": "focalor",
           "device": "rosemary",
           "defconfig": "rad_defconfig"
         },
@@ -45,14 +45,14 @@
         "branch": "master"
       }
     },
-        "enableKernelSU": true,
+        "enableKernelSU": false,
         "enableLXC": false
       },
       {
         "kernelSource": {
           "name": "Rad-Kernel",
           "repo": "https://github.com/cly-build/mt6785.git",
-          "branch": "test",
+          "branch": "focalor",
           "device": "rosemary",
           "defconfig": "rad_defconfig"
         },
