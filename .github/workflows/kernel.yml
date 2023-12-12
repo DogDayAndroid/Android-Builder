@@ -35,7 +35,7 @@ jobs:
 
   Build-Kernel:
     name: "🐎 Build kernel"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       - Read-configuration
     strategy:
