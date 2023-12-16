@@ -42,7 +42,7 @@
       "release": true
     },
     "enableKernelSU": true,
-    "enableLXC": false
+    "enableLXC": true
   },
   {
     "kernelSource": {
@@ -88,7 +88,7 @@
       }
     },
     "enableKernelSU": true,
-    "enableLXC": false
+    "enableLXC": true
   },
   {
     "kernelSource": {
@@ -151,6 +151,6 @@
       "release": true
     },
     "enableKernelSU": true,
-    "enableLXC": false
+    "enableLXC": true
   }
 ]
