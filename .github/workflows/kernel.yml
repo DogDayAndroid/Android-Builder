@@ -297,10 +297,10 @@ jobs:
           fi
 
       - name: 😋 Setup Kali-Nethunter
+        working-directory: ${{ env.KERNEL_NAME }}
         env:
           DEFCONFIG: ${{ env.WORKSPACE }}/${{ env.KERNEL_NAME }}/arch/${{ steps.generate-args.outputs.ARCH }}/configs/${{env.KERNEL_DEFCONFIG_PATH}}
-        working-directory: ${{ env.KERNEL_NAME }}
-        if: env.ENABLE_NETHUNTER == 'true'
+        if: ${{ env.ENABLE_NETHUNTER == 'true' }}
         run: |
           git clone https://github.com/acai66/kali-nethunter_patches.git
           patch -p1 < kali-nethunter_patches/add-rtl88xxau-5.6.4.2-drivers.patch
@@ -308,7 +308,7 @@ jobs:
           #patch -p1 < kali-nethunter_patches/add-wifi-injection.patch
           patch -p1 < kali-nethunter_patches/fix-ath9k-naming-conflict.patch
           sleep 8
-          git clone https://github.com/Biohazardousrom/Kali-defconfig-checker.git kali
+          git clone https://github.com/acai66/Kali-defconfig-checker.git kali
           cd kali
           chmod +x *.sh
           chmod +x check-kernel-config
