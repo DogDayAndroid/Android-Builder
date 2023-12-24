@@ -290,7 +290,7 @@ jobs:
           fi
           if [ -f net/netfilter/xt_qtaguid.c ]; then
             git config --global user.email "github@github.com"
-            git config --global user.name "Github-Action"
+            git config --global user.name "GithubAction"
             git am -s < ${{ env.WORKSPACE }}/Kernel/LXC/Patches/xt_qtaguid.patch
             echo "🎖️ Apply xt_qtaguid.patch"
           fi
