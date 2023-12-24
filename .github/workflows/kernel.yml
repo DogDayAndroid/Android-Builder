@@ -70,6 +70,9 @@ jobs:
       # Whether to enable LXC docker
       ENABLE_LXC: ${{ matrix.CONFIG.enableLXC }}
 
+      # Whether to enable NETHUNTER
+      ENABLE_NETHUNTER: ${{ matrix.CONFIG.enableNETHUNTER }}
+
       # Set output & ccache directory
       OUT_DIR: "${{ github.workspace }}/out"
       CCACHE_DIR: "${{ github.workspace }}/ccache"
@@ -292,6 +295,25 @@ jobs:
             patch -p1 < ${{ env.WORKSPACE }}/Kernel/LXC/Patches/xt_qtaguid.patch
             echo "🎖️ Apply xt_qtaguid.patch"
           fi
+
+      - name: 😋 Setup Kali-Nethunter
+        env:
+          DEFCONFIG: ${{ env.WORKSPACE }}/${{ env.KERNEL_NAME }}/arch/${{ steps.generate-args.outputs.ARCH }}/configs/${{env.KERNEL_DEFCONFIG_PATH}}
+        working-directory: ${{ env.KERNEL_NAME }}
+        if: env.ENABLE_NETHUNTER == 'true'
+        run: |
+          git clone https://github.com/tomxi1997/kali-nethunter_patches.git
+          patch -p1 < kali-nethunter_patches/add-rtl88xxau-5.6.4.2-drivers.patch
+          patch -p1 < kali-nethunter_patches/add-wifi-injection-4.14.patch
+          #patch -p1 < kali-nethunter_patches/add-wifi-injection.patch
+          patch -p1 < kali-nethunter_patches/fix-ath9k-naming-conflict.patch
+          sleep 8
+          git clone https://github.com/Biohazardousrom/Kali-defconfig-checker.git kali
+          cd kali
+          chmod +x *.sh
+          chmod +x check-kernel-config
+          ./check-kernel-config ${{ env.DEFCONFIG }} -w
+          echo "🎖️ Apply NetHunnter patches"
 
       - name: 👍 Start building the kernel
         working-directory: ${{ env.KERNEL_NAME }}
