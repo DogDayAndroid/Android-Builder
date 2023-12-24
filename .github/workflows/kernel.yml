@@ -289,7 +289,7 @@ jobs:
             echo "🎖️ Modify kernel/cgroup/cgroup.c"
           fi
           if [ -f net/netfilter/xt_qtaguid.c ]; then
-            patch -p0 < ${{ env.WORKSPACE }}/Kernel/LXC/Patches/xt_qtaguid.patch
+            patch -p1 < ${{ env.WORKSPACE }}/Kernel/LXC/Patches/xt_qtaguid.patch
             echo "🎖️ Apply xt_qtaguid.patch"
           fi
 
