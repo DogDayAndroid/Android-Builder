@@ -257,8 +257,6 @@ jobs:
           ADD_DEFCONFIG: ${{ env.WORKSPACE }}/Kernel/LXC/LXC_defconfig
         if: ${{ env.ENABLE_LXC == 'true' }}
         run: |
-          git config --global user.email "github@github.com"
-          git config --global user.name "GithubAction"
           # Add configuration
           for config in $(cat ${{ env.ADD_DEFCONFIG }})
           do
@@ -291,7 +289,7 @@ jobs:
             echo "🎖️ Modify kernel/cgroup/cgroup.c"
           fi
           if [ -f net/netfilter/xt_qtaguid.c ]; then
-            git am -s < ${{ env.WORKSPACE }}/Kernel/LXC/Patches/xt_qtaguid.patch
+            patch -p0 < ${{ env.WORKSPACE }}/Kernel/LXC/Patches/xt_qtaguid.patch
             echo "🎖️ Apply xt_qtaguid.patch"
           fi
 
