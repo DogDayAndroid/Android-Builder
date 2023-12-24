@@ -260,7 +260,7 @@ jobs:
           # Add configuration
           for config in $(cat ${{ env.ADD_DEFCONFIG }})
           do
-            echo $i >> ${{ env.DEFCONFIG }}
+            echo $config >> ${{ env.DEFCONFIG }}
           done
 
           # Apply patch
