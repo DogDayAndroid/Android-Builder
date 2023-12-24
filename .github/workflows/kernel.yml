@@ -289,6 +289,8 @@ jobs:
             echo "🎖️ Modify kernel/cgroup/cgroup.c"
           fi
           if [ -f net/netfilter/xt_qtaguid.c ]; then
+            git config --global user.email "github@github.com"
+            git config --global user.name "Github-Action"
             git am -s < ${{ env.WORKSPACE }}/Kernel/LXC/Patches/xt_qtaguid.patch
             echo "🎖️ Apply xt_qtaguid.patch"
           fi
