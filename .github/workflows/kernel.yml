@@ -254,7 +254,7 @@ jobs:
         working-directory: ${{ env.KERNEL_NAME }}
         env:
           DEFCONFIG: ${{ env.WORKSPACE }}/${{ env.KERNEL_NAME }}/arch/${{ steps.generate-args.outputs.ARCH }}/configs/${{env.KERNEL_DEFCONFIG_PATH}}
-          ADD_DEFCONFIG: ${{ env.WORKSPACE }}/LXC/LXC_defconfig
+          ADD_DEFCONFIG: ${{ env.WORKSPACE }}/Kernel/LXC/LXC_defconfig
         if: ${{ env.ENABLE_LXC == 'true' }}
         run: |
           # Add configuration
