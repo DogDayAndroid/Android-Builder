@@ -67,9 +67,14 @@ jobs:
     steps:
       # Clean up the workspace and make room for compilation
       - name: ♈ Cleanup
-        uses: rokibhasansagar/slimhub_actions@main
+        uses: easimon/maximize-build-space@master
         with:
-          retain: "java_tools,android_sdk"
+          root-reserve-mb: 512
+          swap-size-mb: 12288
+          remove-dotnet: "true"
+          remove-haskell: "true"
+          remove-codeql: "true"
+          remove-docker-images: "true"
 
       - name: ♉ Prepare the build environment
         run: |
@@ -92,11 +97,6 @@ jobs:
         working-directory: ${{ env.OF_LOCATION }}
         run: |
           git clone --recursive --depth=1 -j $(nproc) --branch ${{ env.DEVICE_BRANCH }} ${{ env.DEVICE_REPO }} ${{ env.DEVICE_LOCATION }}
-
-      - name: ♌ Set Swap Space
-        uses: pierotofy/set-swap-space@master
-        with:
-          swap-size-gb: 12
 
       - name: ♍ Build it
         working-directory: ${{ env.OF_LOCATION }}
