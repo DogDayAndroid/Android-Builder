@@ -1,10 +1,10 @@
 [
   {
     "kernelSource": {
-      "name": "Mi6X",
-      "repo": "https://github.com/Diva-Room/Miku_kernel_xiaomi_wayne",
-      "branch": "TDA",
-      "device": "wayne",
+      "name": "Mi CC 9e",
+      "repo": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
+      "branch": "laurus-q-oss",
+      "device": "laurus-q-oss",
       "defconfig": "vendor/wayne_defconfig"
     },
     "toolchains": [
@@ -60,6 +60,6 @@
       "release": true
     },
     "enableKernelSU": true,
-    "enableLXC": false
+    "enableLXC": true
   }
 ]
