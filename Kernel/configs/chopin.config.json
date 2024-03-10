@@ -1,11 +1,11 @@
 [
   {
     "kernelSource": {
-      "name": "chopin-ksu",
-      "repo": "https://github.com/JustCallMeBotan/kernel_xiaomi_chopin-1",
-      "branch": "r",
+      "name": "chopin",
+      "repo": "https://github.com/JustCallMeBotan/android_kernel_chopin",
+      "branch": "R",
       "device": "chopin",
-      "defconfig": "chopin_user_defconfig"
+      "defconfig": "chopinid_defconfig"
     },
     "toolchains": [
       {
