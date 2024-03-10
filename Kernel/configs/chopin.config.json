@@ -5,7 +5,7 @@
       "repo": "https://github.com/JustCallMeBotan/android_kernel_chopin_id",
       "branch": "lxr",
       "device": "chopin",
-      "defconfig": "chopin_id_defconfig"
+      "defconfig": "chopin_user_defconfig"
     },
     "toolchains": [
       {
