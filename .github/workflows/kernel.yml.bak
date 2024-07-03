@@ -147,7 +147,7 @@ jobs:
             if echo $toolchain | jq -e 'has("url")' > /dev/null; then
               # If from archive
               toolchain_url=$(echo $toolchain | jq -r ".url")
-              mkdir -p '$toolchain_name'
+              mkdir -p $toolchain_name
 
               # Download archive
               wget "$toolchain_url"
