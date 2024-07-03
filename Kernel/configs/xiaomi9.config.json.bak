@@ -3,7 +3,7 @@
     "kernelSource": {
       "name": "Xiaomi9KernelPoweredBySeparate",
       "repo": "https://github.com/Separatee/AllinOneKernel",
-      "branch": "13.0-lxc-docker-nethunter",
+      "branch": "main",
       "device": "cepheus",
       "defconfig": "cepheus_defconfig"
     },
